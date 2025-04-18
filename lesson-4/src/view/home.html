@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <form class="js-form">
+        <h1>create new user</h1>
+        <input type="text" name="name" placeholder="enter name">
+        <input type="submit">
+    </form>
+    <li class="js-list list">
+
+    </li>
+    <!-- templates -->
+    <template class="js-temp">
+        <li class="js-item">
+            <a href="" class="js-link">
+                <span class="js-name">
+                </span>
+            </a>
+        </li>
+    </template>
+    <!-- modals -->
+    <div id="demo-modal" class="modal">
+        <div class="modal__content">
+            <a href="#" class="modal__close">&times;</a>
+
+            <div class="modal__content">
+                <form class="js-modal-form" method="POST">
+                    <input type="text" name="name" placeholder="update user name">
+                    <input type="submit">
+                </form>
+                <button class="js-delete-btn"
+                    style="border: 1px solid red; background: transparent; color: red;">delete</button>
+            </div>
+        </div>
+    </div>
+    <!-- scripts -->
+    <script src="/js/index.js"></script>
+</body>
+
+</html>
