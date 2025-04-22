@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>posts page</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+    <a href="/index.html">home</a><br>
+    <a href="/new-post.html">publish new post</a>
+    <ul class="js-posts-list">
+
+    </ul>
+
+    <!-- modal -->
+    <div id="demo-modal" class="modal">
+        <div class="modal__content">
+            <a href="#" class="modal__close">&times;</a>
+
+            <div class="modal__content">
+                <form class="js-modal-form">
+                    <input type="text" name="title" placeholder="new title" required>
+                    <input type="text" name="content" placeholder="new content" required>
+                    <input type="submit" value="update">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/posts.js"></script>
+</body>
+
+</html>
