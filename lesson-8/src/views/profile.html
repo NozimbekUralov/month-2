@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <title>Profile Page</title>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">BlogCMS</a>
+
+            <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle">
+            <label for="mobile-menu-toggle" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </label>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">New Post</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#published-posts" class="nav-link">Published Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/profile" class="nav-link">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+
+        <section class="profile-section">
+            <h2>Profile Information</h2>
+            <div class="profile-container">
+                <img src="https://placehold.co/600x400/png?text=Profile+Picture" alt="Profile picture"
+                    class="profile-image">
+
+                <div class="profile-details">
+                    <h3 class="profile-name">John Doe</h3>
+
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                    </div>
+
+                    <form action="/update-profile" method="post">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" value="John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" value="john.doe@example.com" required>
+                        </div>
+
+                        <button type="submit" class="btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="posts-section" id="published-posts">
+            <h2>Manage Your Posts</h2>
+
+            <table class="posts-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Getting Started with HTML and CSS</td>
+                        <td class="post-actions">
+                            <a href="" class="btn btn-small btn-secondary">Edit</a>
+                            <form style="display: inline;">
+                                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <a href="/" class="btn">Create New Post</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/utils.js"></script>
+    <script src="/js/profile.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">BlogCMS</a>
+
+            <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle">
+            <label for="mobile-menu-toggle" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </label>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">New Post</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/profile#published-posts" class="nav-link">Published Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/profile" class="nav-link">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Publish New Post</h1>
+        <form id="publish-form">
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter post title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" name="content" placeholder="Write your post content here..." required></textarea>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn-primary">Publish Post</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/js/utils.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+
+</html>
