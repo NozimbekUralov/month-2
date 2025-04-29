@@ -1,13 +1,14 @@
 import { UserModel } from "../model/index.js";
 import { config, generateToken, myReadFile, myWriteFile } from "../utils/index.js";
+import sha256 from "sha256";
 
 const { USERS } = config;
 
 class UserController {
     async REGISTER(req, res) {
-        console.log(req.body);
         const store = await myReadFile(USERS);
         const user = new UserModel(req.body);
+        user.password = sha256(user.password);
         store.push(user);
         await myWriteFile(USERS, store);
         return res.send(user)
@@ -15,7 +16,8 @@ class UserController {
     async LOGIN(req, res) {
         try {
             const store = await myReadFile(USERS);
-            const { email, password } = req.body;
+            let { email, password } = req.body;
+            password = sha256(password);
             const idx = store.findIndex((user) => user.email == email && user.password == password)
             if (idx == -1) throw new Error("User not found");
             const token = generateToken({ id: store[idx].id });
