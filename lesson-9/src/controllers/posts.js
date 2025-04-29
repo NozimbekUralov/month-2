@@ -1,14 +1,17 @@
 import { myReadFile, config, myWriteFile } from "../utils/index.js";
 import { PostModel } from "../model/index.js";
 
-const { POSTS } = config;
+const { POSTS, USERS } = config;
 
 
 class PostController {
     async create(req, res) {
         try {
             const store = await myReadFile(POSTS);
-            const post = new PostModel(req.body);
+            const data = await myReadFile(USERS);
+            const user = data.filter((user) => user.id == req.user.id);
+            delete user[0].password;
+            const post = new PostModel({ ...req.body, author: user[0] });
             store.push(post);
             await myWriteFile(POSTS, store);
             return res.send(post)
@@ -18,7 +21,7 @@ class PostController {
     }
     async getAll(req, res) {
         try {
-            const { id } = req.params;
+            const { id } = req.user;
             const store = await myReadFile(POSTS);
             const posts = store.filter((post) => post.author.id == id)
             return res.json({ posts });
@@ -41,8 +44,8 @@ class PostController {
     async update(req, res) {
         try {
             const store = await myReadFile(POSTS);
-            const { id } = req.params;
-            const idx = store.findIndex((post) => post.id == id);
+            const { id } = req.user;
+            const idx = store.findIndex((post) => post.author.id == id);
             if (idx == -1) throw new Error("Post not found");
             store[idx] = { ...store[idx], ...req.body };
             await myWriteFile(POSTS, store);
@@ -55,7 +58,8 @@ class PostController {
         try {
             const store = await myReadFile(POSTS);
             const { id } = req.params;
-            const idx = store.findIndex((post) => post.id == id);
+            const { id: userId } = req.user;
+            const idx = store.findIndex((post) => post.author.id == userId && post.id == id);
             if (idx == -1) throw new Error("Post not found");
             const post = store.splice(idx, 1);
             await myWriteFile(POSTS, store);

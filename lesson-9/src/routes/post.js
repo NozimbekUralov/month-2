@@ -1,14 +1,15 @@
 import express from "express";
 import post from "../controllers/posts.js";
+import { authGuard } from "../middlewares/index.js";
 
 const router = express.Router();
 
-router.post("/post", post.create)
-router.post("/post/:id", post.getAll);
+router.post("/post", authGuard, post.create)
+router.get("/posts", authGuard, post.getAll);
 
 router.route("/post/:id")
-    .get(post.getById)
-    .put(post.update)
-    .delete(post.delete);
+    .get(authGuard, post.getById)
+    .put(authGuard, post.update)
+    .delete(authGuard, post.delete);
 
 export default router;

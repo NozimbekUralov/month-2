@@ -1,5 +1,5 @@
 import { UserModel } from "../model/index.js";
-import { config, myReadFile, myWriteFile } from "../utils/index.js";
+import { config, generateToken, myReadFile, myWriteFile } from "../utils/index.js";
 
 const { USERS } = config;
 
@@ -18,7 +18,10 @@ class UserController {
             const { email, password } = req.body;
             const idx = store.findIndex((user) => user.email == email && user.password == password)
             if (idx == -1) throw new Error("User not found");
+            const token = generateToken({ id: store[idx].id });
             const user = store[idx];
+            user.token = token;
+            delete user.password;
             return res.json(user);
         } catch (err) {
             res.json({ message: err.message })
@@ -28,12 +31,14 @@ class UserController {
     async UPDATE(req, res) {
         try {
             const store = await myReadFile(USERS);
-            const { id } = req.params;
+            const { id } = req.user;
             const idx = store.findIndex((user) => user.id == id);
             if (idx == -1) throw new Error("User not found");
             store[idx] = { ...store[idx], ...req.body };
             await myWriteFile(USERS, store);
-            return res.json(store[idx]);
+            const user = store[idx];
+            delete user.password;
+            return res.json(user);
         } catch (err) {
             res.json({ message: err.message })
         }
@@ -42,7 +47,7 @@ class UserController {
     async DELETE(req, res) {
         try {
             const store = await myReadFile(USERS);
-            const { id } = req.params;
+            const { id } = req.user;
             const idx = store.findIndex((user) => user.id == id);
             if (idx == -1) throw new Error("User not found");
             const user = store.splice(idx, 1);

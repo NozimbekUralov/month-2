@@ -44,28 +44,30 @@
                     class="profile-image">
 
                 <div class="profile-details">
-                    <h3 class="profile-name">John Doe</h3>
+                    <h3 class="profile-name, js-name"></h3>
 
                     <div class="profile-stats">
                         <div class="stat">
-                            <div class="stat-value">12</div>
-                            <div class="stat-label">Posts</div>
+                            <div class="stat-value, js-posts"></div>
+                            <div class="stat-label">posts</div>
                         </div>
                     </div>
 
-                    <form action="/update-profile" method="post">
+                    <form class="js-form">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" name="name" value="John Doe" required>
+                            <input type="text" name="name" class="js-name" required>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" value="john.doe@example.com" required>
+                            <input type="email" name="email" class="js-email" required>
                         </div>
 
                         <button type="submit" class="btn">Update Profile</button>
                     </form>
+                    <button class="btn btn-secondary js-logout">log out</button>
+                    <button class="btn btn-danger js-delete">delete profile</button>
                 </div>
             </div>
         </section>
@@ -73,14 +75,14 @@
         <section class="posts-section" id="published-posts">
             <h2>Manage Your Posts</h2>
 
-            <table class="posts-table">
+            <table class="posts-table js-posts-table">
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="js-tBody">
                     <tr>
                         <td>Getting Started with HTML and CSS</td>
                         <td class="post-actions">
@@ -98,6 +100,18 @@
             </div>
         </section>
     </div>
+
+    <template class="js-row-template">
+        <tr>
+            <td class="js-title">Getting Started with HTML and CSS</td>
+            <td class="post-actions">
+                <a href="" class="js-edit-link btn btn-small btn-secondary">Edit</a>
+                <form class="js-delete-form" style="display: inline;">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </template>
 
     <script src="/js/utils.js"></script>
     <script src="/js/profile.js"></script>

@@ -1,7 +1,6 @@
 const elFormSignin = document.querySelector(".js-form-signin");
 const elFormSignup = document.querySelector(".js-form-signup");
 
-const BASE_URL = "http://localhost:3000";
 
 const register = async (data) => {
     const res = await fetch(`${BASE_URL}/auth/register`, {
@@ -24,3 +23,30 @@ const login = async (data) => {
     });
     return await res.json();
 }
+
+
+elFormSignup.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+    try {
+        const formData = new FormData(evt.target);
+        const data = Object.fromEntries(formData.entries());
+        const res = await register(data);
+        if (res) confirm("user successfully registered. you can login now");
+    } catch (err) {
+        console.log(err);
+    }
+
+});
+
+elFormSignin.addEventListener("submit", async (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
+    const data = Object.fromEntries(formData.entries());
+    const res = await login(data);
+    console.log(res);
+    if (res.id) {
+        setLocalStorageItem(USER, res);
+        setLocalStorageItem(TOKEN, res.token);
+        window.location.href = '/';
+    }
+})

@@ -1,4 +1,7 @@
 const USER = "user";
+const BASE_URL = "http://localhost:3000/api";
+const TOKEN = "token";
+
 
 function checkAuth() {
     const user = getLocalStorageItem(USER);
