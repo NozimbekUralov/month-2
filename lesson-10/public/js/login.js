@@ -18,6 +18,7 @@ elForm.addEventListener("submit", async (evt) => {
     const data = Object.fromEntries(formData);
     const res = await login(data);
     if (!res.user) return;
+    localStorage.setItem("token", res.token);
     confirm("User logged in");
     window.location.href = "/";
 });

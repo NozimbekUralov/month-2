@@ -1,13 +1,21 @@
 const TOKEN = "token";
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3000/api';
 
 const getLocalstorageItem = (key) => {
-    return JSON.parse(localStorage.getItem(key));
+    return localStorage.getItem(key);
 }
 
 const setLocalstorageItem = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 }
+
+(function () {
+    const token = localStorage.getItem(TOKEN);
+    if (!token) window.location.href = "/auth/login";
+}())
+
+
+const elForm = document.querySelector('.js-form');
 
 
 
@@ -17,9 +25,23 @@ function toggleTaskDescription(element) {
     taskItem.classList.toggle('expanded');
 }
 
+const changeTaskStatus = async (id) => {
+    const res = await fetch(BASE_URL + "/tasks/" + id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getLocalstorageItem(TOKEN)}`
+        },
+    });
+    return await res.json();
+}
+
 // Toggle task completion status
-function toggleTaskCompletion(checkbox) {
+async function toggleTaskCompletion(checkbox) {
     const taskItem = checkbox.closest('.todo-item');
+    const id = taskItem.getAttribute('data-id');
+    const { task } = await changeTaskStatus(id);
+    if (!task) return alert("Something went wrong")
     if (checkbox.checked) {
         taskItem.classList.add('completed');
     } else {
@@ -36,7 +58,7 @@ function updateTasksCount() {
     document.getElementById('tasks-left').textContent = tasksLeft;
 }
 
-const deleteTask = async (id) => {
+const deleteTodo = async (id) => {
     const res = await fetch(BASE_URL + "/tasks/" + id, {
         method: "DELETE",
         headers: {
@@ -48,10 +70,16 @@ const deleteTask = async (id) => {
 };
 
 // Delete task
-function deleteTask(button) {
+async function deleteTask(button) {
     const taskItem = button.closest('.todo-item');
-    taskItem.remove();
-    updateTasksCount();
+    try {
+        const res = await deleteTodo(taskItem.getAttribute('data-id'));
+        if (!res) throw new Error("Something went wrong");
+        taskItem.remove();
+        updateTasksCount();
+    } catch (err) {
+        alert(err.message);
+    }
 }
 
 const updateTask = async (data) => {
@@ -85,43 +113,45 @@ function closeEditModal() {
     document.getElementById('edit-modal-overlay').classList.remove('active');
 }
 
+const elModalForm = document.querySelector('.js-modal-edit-form');
+
 // Save task edit
-function saveTaskEdit() {
+elModalForm.addEventListener('submit', async function saveTaskEdit(evt) {
+    evt.preventDefault();
     const taskId = document.getElementById('edit-task-id').value;
     const taskTitle = document.getElementById('edit-task-title').value;
     const taskDescription = document.getElementById('edit-task-description').value;
+    const formData = new FormData(evt.target);
+    const data = Object.fromEntries(formData.entries());
+    data.id = taskId;
+    const res = await updateTask(data);
+    console.log(res)
 
     const taskItem = document.querySelector(`.todo-item[data-id="${taskId}"]`);
     taskItem.querySelector('.todo-title').textContent = taskTitle;
     taskItem.querySelector('.todo-description').textContent = taskDescription;
 
     closeEditModal();
-}
+})
 
-// Add new task
-document.getElementById('add-todo-form').addEventListener('submit', function (e) {
-    e.preventDefault();
+function logout() {
+    localStorage.removeItem(TOKEN);
+    window.location.href = "/auth/login";
+};
 
-    const titleInput = document.getElementById('todo-title');
-    const contentInput = document.getElementById('todo-content');
-
-    const title = titleInput.value.trim();
-    const content = contentInput.value.trim();
-
-    if (title) {
-        const todoList = document.getElementById('todo-list');
-        const newTaskId = Date.now(); // Generate a unique ID
-
+const renderTasks = (tasks) => {
+    const todoList = document.getElementById('todo-list');
+    tasks.forEach(task => {
         const newTaskHTML = `
-            <li class="todo-item" data-id="${newTaskId}">
+            <li class="todo-item ${task.is_complete ? 'completed' : ''}" data-id="${task.id}">
                 <div class="todo-header">
                     <div class="todo-title-container" onclick="toggleTaskDescription(this)">
                         <label class="checkbox-container">
-                            <input type="checkbox" onchange="toggleTaskCompletion(this)">
+                            <input type="checkbox" ${task.is_complete ? 'checked' : ''} onchange="toggleTaskCompletion(this)">
                             <span class="checkmark"></span>
                         </label>
                         <div class="todo-title-wrapper">
-                            <div class="todo-title">${title}</div>
+                            <div class="todo-title">${task.title}</div>
                             <div class="expand-icon"></div>
                         </div>
                     </div>
@@ -130,18 +160,54 @@ document.getElementById('add-todo-form').addEventListener('submit', function (e)
                         <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
                     </div>
                 </div>
-                <div class="todo-description">${content}</div>
+                <div class="todo-description">${task.content}</div>
             </li>
         `;
 
         todoList.insertAdjacentHTML('afterbegin', newTaskHTML);
 
-        // Clear inputs
-        titleInput.value = '';
-        contentInput.value = '';
-
         updateTasksCount();
-    }
+    });
+}
+
+const getAllTasks = async () => {
+    const res = await fetch(BASE_URL + "/tasks", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${getLocalstorageItem(TOKEN)}`
+        },
+    });
+    return await res.json();
+}
+
+getAllTasks().then(res => {
+    if (!res.tasks) return alert("Something went wrong");
+    renderTasks(res.tasks);
+}).catch(err => {
+    alert(err.message);
+});
+
+const createTask = async (data) => {
+    const res = await fetch(BASE_URL + "/task", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getLocalstorageItem(TOKEN)}`
+        },
+        body: JSON.stringify(data),
+    });
+    return await res.json();
+}
+
+// Add new task
+elForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    const res = await createTask(data);
+    if (!res.task) return alert("Something went wrong");
+    renderTasks([res.task]);
+    e.target.reset();
 });
 
 // Filter tasks

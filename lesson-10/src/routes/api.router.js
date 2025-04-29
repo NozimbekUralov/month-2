@@ -13,9 +13,11 @@ router.route("/user")
     .delete(authGuard, authController.delete);
 
 router.post("/task", authGuard, taskController.create);
-router.delete("/tasks/:id", authGuard, taskController.delete);
-router.put("/tasks/:id", authGuard, taskController.update);
 router.get("/tasks", authGuard, taskController.getAll);
+router.route("/tasks/:id")
+    .delete(authGuard, taskController.delete)
+    .put(authGuard, taskController.update)
+    .patch(authGuard, taskController.updateStatus);
 
 
 module.exports = router;

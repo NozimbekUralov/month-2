@@ -1,5 +1,8 @@
+const { myReadFile, serverConfig } = require("../utils");
+const taskController = require("./task.controller");
+
 class ViewController {
-    index(req, res) {
+    async index(req, res) {
         res.render('index', { title: 'Todo App', tasks: [] });
     }
     login(req, res) {

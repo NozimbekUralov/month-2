@@ -15,6 +15,7 @@ class UserModel {
 class TaskModel {
     constructor({ title, content, owner }) {
         this.id = idProvider(TASKS);
+        this.is_complete = false;
         this.title = title;
         this.content = content;
         this.owner = owner;

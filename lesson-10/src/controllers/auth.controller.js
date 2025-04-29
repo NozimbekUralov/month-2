@@ -22,7 +22,7 @@ class AuthController {
             if (idx === -1) throw new Error("Invalid email or password");
             const user = store[idx];
             delete user.password;
-            generateToken({ id: user.id })
+            const token = generateToken({ id: user.id })
             res.json({ message: "User logged in", user, token });
         } catch (err) {
             res.status(401).json({ message: err.message });
