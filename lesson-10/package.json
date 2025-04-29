@@ -1,0 +1,18 @@
+{
+    "name": "todo-app",
+    "version": "1.0.0",
+    "description": "A simple Express application using EJS for templating.",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "node --watch src/app.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.2"
+    }
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%=title %>
+    </title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Todo App</h1>
+        </header>
+
+        <form class="todo-form" id="add-todo-form">
+            <div class="input-group">
+                <label for="todo-title" class="input-label">Task Title</label>
+                <input type="text" id="todo-title" placeholder="Enter task title..." required>
+            </div>
+
+            <div class="input-group">
+                <label for="todo-content" class="input-label">Task Description</label>
+                <textarea id="todo-content" placeholder="Enter task details..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="add-btn">Add Task</button>
+            </div>
+        </form>
+
+        <div class="todo-stats">
+            <p><span id="tasks-left">3</span> tasks left</p>
+            <div class="filter-buttons">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Active</button>
+                <button class="filter-btn">Completed</button>
+            </div>
+            <button class="clear-btn">Clear Completed</button>
+        </div>
+
+        <ul class="todo-list" id="todo-list">
+            <% tasks.forEach(task=> { %>
+                <li class="todo-item" data-id=<%=task.id%>>
+                    <div class="todo-header">
+                        <div class="todo-title-container" onclick="toggleTaskDescription(this)">
+                            <label class="checkbox-container">
+                                <input type="checkbox" onchange="toggleTaskCompletion(this)">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="todo-title-wrapper">
+                                <div class="todo-title">
+                                    <%=task.title %>
+                                </div>
+                                <div class="expand-icon"></div>
+                            </div>
+                        </div>
+                        <div class="todo-actions">
+                            <button class="edit-btn" onclick="openEditModal(this)">Edit</button>
+                            <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
+                        </div>
+                    </div>
+                    <div class="todo-description">
+                        <%=task.description %>
+                    </div>
+                </li>
+                <%}) %>
+        </ul>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div class="modal-overlay" id="edit-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Task</h2>
+            </div>
+            <div class="modal-body">
+                <form class="modal-form" id="edit-task-form">
+                    <input type="hidden" id="edit-task-id">
+                    <div class="input-group">
+                        <label for="edit-task-title" class="input-label">Task Title</label>
+                        <input type="text" id="edit-task-title" class="modal-input" placeholder="Enter task title..."
+                            required>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-task-description" class="input-label">Task Description</label>
+                        <textarea id="edit-task-description" class="modal-textarea"
+                            placeholder="Enter task details..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="modal-save-btn" onclick="saveTaskEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/index.js"></script>
+</body>
+
+</html>
