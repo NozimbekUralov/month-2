@@ -1,0 +1,23 @@
+{
+    "name": "lesson-12-exam",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "start": "node src/server",
+        "dev": "node --watch src/server"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "dotenv": "^16.5.0",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "express-fileupload": "^1.5.1",
+        "joi": "^17.13.3",
+        "jsonwebtoken": "^9.0.2",
+        "sha256": "^0.2.0"
+    }
+}
